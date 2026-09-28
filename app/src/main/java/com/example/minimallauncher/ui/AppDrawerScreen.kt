@@ -2,6 +2,9 @@ package com.example.minimallauncher.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +15,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -30,7 +35,9 @@ import com.example.minimallauncher.model.AppInfo
 @Composable
 fun AppDrawerScreen(
     apps: List<AppInfo>,
-    onAppClick: (AppInfo) -> Unit
+    favoritePackageNames: Set<String>,
+    onAppClick: (AppInfo) -> Unit,
+    onFavoriteChange: (AppInfo, Boolean) -> Unit
 ) {
     var query by rememberSaveable {
         mutableStateOf("")
@@ -90,19 +97,73 @@ fun AppDrawerScreen(
                     key = { app -> app.packageName }
                 ) { app ->
 
-                    Text(
-                        text = app.name,
-                        fontSize = 18.sp,
-                        color = Color.White,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onAppClick(app)
-                            }
-                            .padding(vertical = 12.dp)
+                    AppDrawerItem(
+                        app = app,
+                        isFavorite = app.packageName in favoritePackageNames,
+                        onClick = { onAppClick(app) },
+                        onFavoriteChange = { shouldBeFavorite ->
+                            onFavoriteChange(app, shouldBeFavorite)
+                        }
                     )
                 }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun AppDrawerItem(
+    app: AppInfo,
+    isFavorite: Boolean,
+    onClick: () -> Unit,
+    onFavoriteChange: (Boolean) -> Unit
+) {
+    var showFavoriteAction by remember {
+        mutableStateOf(false)
+    }
+
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = app.name,
+            fontSize = 18.sp,
+            color = Color.White,
+            modifier = Modifier
+                .fillMaxWidth()
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClick = {
+                        showFavoriteAction = true
+                    }
+                )
+                .padding(vertical = 12.dp)
+        )
+
+        DropdownMenu(
+            expanded = showFavoriteAction,
+            onDismissRequest = {
+                showFavoriteAction = false
+            },
+            containerColor = Color.Black.copy(alpha = 0.92f)
+        ) {
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = if (isFavorite) {
+                            "Remove from Home"
+                        } else {
+                            "Add to Home"
+                        },
+                        color = Color.White
+                    )
+                },
+                onClick = {
+                    showFavoriteAction = false
+                    onFavoriteChange(!isFavorite)
+                }
+            )
         }
     }
 }
