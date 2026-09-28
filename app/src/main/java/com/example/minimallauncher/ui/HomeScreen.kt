@@ -28,7 +28,9 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.text.TextStyle
 @Composable
 fun HomeScreen(
     favoriteApps: List<AppInfo>,
@@ -61,6 +63,11 @@ fun HomeScreen(
 
     val time = currentTime.format(
         DateTimeFormatter.ofPattern("HH:mm")
+    )
+    val textShadow = Shadow(
+        color = Color.Black.copy(alpha = 0.35f),
+        offset = Offset(1f, 2f),
+        blurRadius = 6f
     )
 
     Column(
@@ -97,7 +104,10 @@ fun HomeScreen(
                 text = day,
                 fontSize = 96.sp,
                 fontWeight = FontWeight.Light,
-                color = Color.White
+                color = Color.White,
+                style = TextStyle(
+                    shadow = textShadow
+                )
             )
 
             Spacer(
@@ -112,14 +122,21 @@ fun HomeScreen(
                     text = monthYear.uppercase(),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color.White
+                    color = Color.White,
+                    style = TextStyle(
+                        shadow = textShadow
+                    )
+
                 )
 
                 Text(
                     text = weekDay,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color.White.copy(alpha = 0.75f)
+                    color = Color.White.copy(alpha = 0.75f),
+                    style = TextStyle(
+                        shadow = textShadow
+                    )
                 )
             }
         }
@@ -132,7 +149,10 @@ fun HomeScreen(
             text = time,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
-            color = Color.White.copy(alpha = 0.85f)
+            color = Color.White.copy(alpha = 0.85f),
+            style = TextStyle(
+                shadow = textShadow
+            )
         )
 
         // Takes up the empty middle area of the screen.
