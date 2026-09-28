@@ -37,6 +37,9 @@ class AppRepository(
                         .packageName
                 )
             }
+            .filter { app ->
+                app.packageName != context.packageName
+            }
             .distinctBy { app ->
                 app.packageName
             }

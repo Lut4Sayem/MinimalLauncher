@@ -13,6 +13,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.example.minimallauncher.ui.AppDrawerScreen
 import android.graphics.Color
+import androidx.activity.compose.BackHandler
+
+
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +34,11 @@ fun Launcher() {
     val context = LocalContext.current
     var showAppDrawer by remember {
         mutableStateOf(false)
+    }
+    BackHandler(
+        enabled = showAppDrawer
+    ) {
+        showAppDrawer = false
     }
 
     val appRepository = remember {
@@ -60,6 +68,19 @@ fun Launcher() {
     } else {
 
         HomeScreen(
+            favoriteApps = installedApps.take(5),
+
+            onAppClick = { app ->
+
+                val launchIntent =
+                    context.packageManager
+                        .getLaunchIntentForPackage(app.packageName)
+
+                if (launchIntent != null) {
+                    context.startActivity(launchIntent)
+                }
+            },
+
             onSwipeUp = {
                 showAppDrawer = true
             }
