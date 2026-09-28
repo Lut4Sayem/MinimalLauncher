@@ -26,6 +26,8 @@ import com.example.minimallauncher.model.AppInfo
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun HomeScreen(
@@ -93,28 +95,31 @@ fun HomeScreen(
 
             Text(
                 text = day,
-                fontSize = 90.sp,
-                color = Color.Black
+                fontSize = 96.sp,
+                fontWeight = FontWeight.Light,
+                color = Color.White
             )
 
             Spacer(
-                modifier = Modifier.width(14.dp)
+                modifier = Modifier.width(16.dp)
             )
 
             Column(
-                modifier = Modifier.padding(top = 17.dp)
+                modifier = Modifier.padding(top = 20.dp)
             ) {
 
                 Text(
-                    text = monthYear,
-                    fontSize = 24.sp,
-                    color = Color.Black
+                    text = monthYear.uppercase(),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White
                 )
 
                 Text(
                     text = weekDay,
-                    fontSize = 13.sp,
-                    color = Color.Black
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White.copy(alpha = 0.75f)
                 )
             }
         }
@@ -125,8 +130,9 @@ fun HomeScreen(
 
         Text(
             text = time,
-            fontSize = 18.sp,
-            color = Color.Black
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.White.copy(alpha = 0.85f)
         )
 
         // Takes up the empty middle area of the screen.
@@ -163,13 +169,14 @@ fun FavoriteAppItem(
 
     Text(
         text = app.name,
-        fontSize = 18.sp,
-        color = Color.White,
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Medium,
+        color = Color.White.copy(alpha = 0.9f),
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
                 onClick()
             }
-            .padding(vertical = 10.dp)
+            .padding(vertical = 8.dp)
     )
 }
