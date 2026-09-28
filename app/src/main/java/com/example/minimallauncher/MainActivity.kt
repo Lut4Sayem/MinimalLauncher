@@ -24,7 +24,12 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.platform.LocalContext
+import com.example.minimallauncher.data.AppRepository
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.clickable
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +43,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun LauncherHomeScreen() {
+    val context = LocalContext.current
+
+    val appRepository = remember {
+        AppRepository(context)
+    }
+
+    val installedApps = remember {
+        appRepository.getInstalledApps()
+    }
 
     var currentTime by remember {
         mutableStateOf(LocalDateTime.now())
@@ -115,5 +129,43 @@ fun LauncherHomeScreen() {
             fontSize = 18.sp,
             color = Color.Black
         )
+        Spacer(
+            modifier = Modifier.height(30.dp)
+        )
+
+        Text(
+            text = "APPS",
+            fontSize = 12.sp,
+            color = Color.Gray
+        )
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+        LazyColumn {
+
+            items(installedApps) { app ->
+
+                Text(
+                    text = app.name,
+                    fontSize = 18.sp,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+
+                            val launchIntent =
+                                context.packageManager
+                                    .getLaunchIntentForPackage(app.packageName)
+
+                            if (launchIntent != null) {
+                                context.startActivity(launchIntent)
+                            }
+                        }
+                        .padding(vertical = 10.dp)
+                )
+            }
+        }
     }
 }
