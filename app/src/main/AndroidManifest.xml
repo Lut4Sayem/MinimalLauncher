@@ -13,9 +13,11 @@
         android:theme="@style/Theme.MinimalLauncher">
         <activity
             android:name=".MainActivity"
+            android:showOnLockScreen="false"
             android:exported="true"
             android:label="MinimalLauncher"
             android:theme="@style/Theme.MinimalLauncher">
+
 
             <!-- Allows Android Studio / app drawer to launch our app -->
             <intent-filter>
